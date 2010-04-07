@@ -1,7 +1,7 @@
 Resty Blog in weblocks
 ======================
 
-resty-blog expands the resty-weblocgks example that comes with
+Expand the simple-blog example that comes with
 weblocks to support a more buzzword-compliant blog interface,
 especially with regards to URLs.
 
@@ -22,6 +22,18 @@ shooting for the equivalent of blogspot.com (heh, someday!).
 2. Demonstrate how to accomplish "normal" things with weblocks, such as URLs, JS-integration, using external toolkits, sending mail etc.
 
 # Current UI / widget-tree decisions
+
+We have two choices:
+
+* Original plan: top level dispatcher that embeds a menu/archive
+subwidget and also draws the UI for the post.
+* Suggested by Polzer: top level widget does not consume any
+tokens.. [still figuring out how this works] [ng-tok]
+
+[ng-tok]: http://groups.google.com/group/weblocks/msg/8d53486c83df7def
+"Suggestion for sub-dispatchers"
+
+
 
 ## URLs map to specific UIs as follows:
 
@@ -44,6 +56,7 @@ shooting for the equivalent of blogspot.com (heh, someday!).
 # Authors
 
 In chronological order:
+
 * Evan Monroig  <evan.monroig@gmail.com>
 * Benjamin Collins <aggieben@gmail.com>
 * Nandan Bagchee <nandan.bagchee@gmail.com>
