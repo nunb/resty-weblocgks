@@ -23,6 +23,10 @@
     arranged by date.  Simple right now, but can be fancied up with
     javascript-ish dropdowns etc."))
 
+(defmethod initialize-instance :after ((w nunb-blog-toplevel) &rest args)
+  (with-slots (menu-widget) w
+    (setf menu-widget (make-instance 'nunb-menu-ish-post-overview))))
+
 (defmethod blog-selector-choose-post (selector tokens)
   "Given the selector and a set of tokens, return the blog post, or carp if not found.
    Because of the way the toplevel is called, it will also  be the resp. of this fn. to
@@ -30,19 +34,46 @@
    sidebar that most blogs have). We'll start with english, and as an exercise see how hard
    it would be to add other languages."
   ;;(break (format nil "TOKENS ~{~S, ~} ~%" tokens))
-  (cond
-    ((equal (first tokens) "tags")
-     (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-						      (with-html (:div "Search posts by tags"))))
-	     tokens nil))
-    ((equal (first tokens) "author")
-          (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-						      (with-html (:div "Search posts by author"))))
-	     tokens nil))
-    (t ;; Handle year/month/date and year/month/title
-     (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-						      (with-html (:div "Fell through to year/month/date and year/month/title case"))))
-     ))
+  (with-slots (menu-widget) selector
+    (cond
+      ((equal (first tokens) "tags")
+       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								(with-html (:div "Search posts by tags"))))
+	       tokens nil))
+      ((equal (first tokens) "author")
+       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								(with-html (:div "Search posts by author"))))
+	       tokens nil))
+      ((equal (first tokens) "post")
+       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								(with-html (:div "Retrieve post with specified title"))))
+	       tokens nil))
+      ((equal (first tokens) "admin")
+       (values
+	(make-admin-page)
+	#+nomore(make-instance 'funcall-widget :fun-designator (lambda/cc (&rest args)
+								 (with-flow (root-composite)
+								   (unless (authenticatedp)
+								     (do-dialog "Login"))
+								   (if (authenticatedp)
+								       (yield (make-admin-page))
+								       (progn
+									 (send-script "Login failure")
+									 (redirect "/"))))
+								 (with-html (:div "If user is logged in, proceed, otherwise dialogs.."))))
+	tokens nil))
+
+      ((and (eql (length (first tokens)) 4)
+	    (member (first tokens)  (list "2010" "2010" "2010" "2010" "2010" "2010"))) ;; handle year/month/date and year/month/title
+       (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+							(with-html (:div "Fell through to year/month/date and year/month/title case"))
+							(render-widget menu-widget)))
+       )
+      (t ;; Handle anything else
+       (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+							(with-html (:div "Fell through to unknown URI: dunno what user wants"))
+							(render-widget menu-widget)))
+       #+nomore(values menu-widget tokens nil))))
   )
 
 
@@ -58,6 +89,12 @@
   (loop for classname in (cons class (mapcar #'class-name (moptilities:subclasses (find-class class)))) 
 	     nconc (find-persistent-objects (class-store 'class) classname)))
 
+(defmacro with-gensyms-prefix (syms &body body)
+  `(let ,(mapcar #'(lambda (s)
+                     `(,s (gensym "d")))
+                 syms)
+     ,@body))
+
 ;; Model classes
 
 (defclass* tagged-item ()
@@ -66,3 +103,17 @@
 (defclass* nunb-post (post)
   ((ts :documentation "I like timestamps")))
 
+
+;; Render the menu-ish
+
+(defmethod render-widget-body ((w nunb-menu-ish-post-overview) &rest args)
+  "Render all posts by author, date, tags etc. This can be changed later, and made more javascripty .."
+  (with-html
+    (:div "(menu-ish) list of all posts"
+	  (:ul
+	   (dolist (p (all-of 'post))
+	     (with-gensyms-prefix (a b)
+	       (with-html
+		 (:li
+		  (:div :class "post-title"
+			(:a :href (format nil "/post/~A" (weblocks::url-encode (post-title p))) (str (post-title p))))))))))))
