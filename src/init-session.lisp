@@ -29,7 +29,7 @@
    return a menu-ish widget that shows what url paths are available (ie the monthly archive
    sidebar that most blogs have). We'll start with english, and as an exercise see how hard
    it would be to add other languages."
-  (break (format nil "TOKENS ~{~S, ~} ~%" tokens))
+  ;;(break (format nil "TOKENS ~{~S, ~} ~%" tokens))
   (cond
     ((equal (first tokens) "tags")
      (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)

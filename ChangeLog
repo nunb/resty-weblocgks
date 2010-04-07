@@ -1,3 +1,9 @@
+2010-04-07  Nandan Bagchee <nandan.bagchee@gmail.com>
+
+resty-blog-0.1
+
+	* Changed init-session to include code for selector.
+
 2008-03-08  Evan Monroig  <evan.monroig@gmail.com>
 
 blog-v4
