@@ -1,0 +1,32 @@
+(require 'asdf)
+(require 'sb-posix)
+
+(defvar *project-root* (pathname (nth 1 *posix-argv*)))
+(defvar *port* (parse-integer (nth 2 *posix-argv*)))
+(defvar *swank-port* (parse-integer (nth 3 *posix-argv*)))
+(defvar *project-lib-systems* (merge-pathnames #p"lib/systems/" *project-root*))
+(defvar *project-weblocks-system* (merge-pathnames #p"weblocks/" *project-root*)) 
+
+(push *project-root* asdf:*central-registry*)
+(push *project-lib-systems* asdf:*central-registry*)
+(push *project-weblocks-system* asdf:*central-registry*)
+
+(asdf:operate 'asdf:load-op 'weblocks)
+(asdf:operate 'asdf:load-op 'resty-weblocgks)
+
+(asdf:oos 'asdf:load-op 'swank)
+(swank:create-server :dont-close t :port *swank-port*)
+
+(format t "Welcome to weblocks~%")
+(format t "Weblocks is running on port ~S, and can be accessed
+ by browsing http://localhost:~S~%" *port* *port*)
+(format t "Swank is running on port ~S~%" *swank-port*)
+(format t "Use (quit) to exit REPL")
+(format t "~%~%~%~%~%")
+
+
+;; (in-package resty-weblocgks)
+
+(defmacro loadsys (sys)
+ `(asdf:oos 'asdf:load-op (quote ,sys)))
+
