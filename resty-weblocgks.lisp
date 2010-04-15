@@ -10,12 +10,16 @@
 
 (export '(start-resty-weblocgks stop-resty-weblocgks))
 
+(defparameter *our-public-files-path*   (compute-public-files-path :resty-weblocgks))
+
 (defwebapp resty-weblocgks
     :prefix "/"
     :description "resty-weblocgks: An example application"
     :init-user-session 'resty-weblocgks::init-user-session
+    :public-files-path *our-public-files-path*
     :autostart t
-    :dependencies '((:stylesheet "navigation"))
+    :dependencies '((:stylesheet "navigation")
+		    (:stylesheet "style"))
     :ignore-default-dependencies nil) ;; accept the defaults
 
 (defun start-resty-weblocgks (&rest args)

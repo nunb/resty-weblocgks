@@ -46,6 +46,9 @@
 				  ((:file "admin-guard")
 				   (:file "post")
 				   (:file "blog" 
-					  :depends-on ("post")))
+					  :depends-on ("post"))
+				   (:file "menu-ish-widget")
+				   (:file "blog-toplevel"
+					  :depends-on ("menu-ish-widget")))
 				  :depends-on ("model" "views")))
 			:depends-on ("resty-weblocgks" conf))))
