@@ -36,37 +36,37 @@
    it would be to add other languages."
   ;;(break (format nil "TOKENS ~{~S, ~} ~%" tokens))
   (with-slots (menu-widget) selector
-    (cond
-      ((equal (first tokens) "tags")
-       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-								(with-html (:div "Search posts by tags"))))
-	       tokens nil))
-      ((equal (first tokens) "author")
-       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-								(with-html (:div "Search posts by author"))))
-	       tokens nil))
-      ((equal (first tokens) "post")
-       (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-								(with-html (:div "Retrieve post with specified title"))))
-	       tokens nil))
-      ((equal (first tokens) "admin")
-       (values
-	;;(make-admin-page)
-	;;#+nomore
-	(make-instance 'admin-guard-widget) ;; This used to be a simple-widget, but that was too simplistic an approach!
-	tokens nil))
+    (let ((menu-renderer (f_% (render-widget menu-widget))))
+      (cond
+	((equal (first tokens) "tags")
+	 (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								  (with-html (:div "Search posts by tags"))))
+		 tokens nil))
+	((equal (first tokens) "author")
+	 (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								  (with-html (:div "Search posts by author"))))
+		 tokens nil))
+	((equal (first tokens) "post")
+	 (values (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+								  (with-html (:div "Retrieve post with specified title"))))
+		 tokens nil))
+	((equal (first tokens) "admin")
+	 (values
+	  ;;(make-admin-page)
+	  ;;#+nomore
+	  (make-instance 'admin-guard-widget) ;; This used to be a simple-widget, but that was too simplistic an approach!
+	  tokens nil))
 
-      ((and (eql (length (first tokens)) 4)
-	    (member (first tokens)  (list "2010" "2010" "2010" "2010" "2010" "2010"))) ;; handle year/month/date and year/month/title
-       (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-							(with-html (:div "Fell through to year/month/date and year/month/title case"))
-							(render-widget menu-widget)))
-       )
-      (t ;; Handle anything else
-       (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
-							(with-html (:div "Fell through to unknown URI: dunno what user wants"))
-							(render-widget menu-widget)))
-       #+nomore(values menu-widget tokens nil))))
+	((and (eql (length (first tokens)) 4)
+	      (member (first tokens)  (list "2010" "2010" "2010" "2010" "2010" "2010"))) ;; handle year/month/date and year/month/title
+	 (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+							  (with-html (:div "Fell through to year/month/date and year/month/title case"))
+							  (render-widget menu-widget)))
+	 )
+	(t ;; Handle anything else
+	 (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+							  (with-html (:div "Fell through to unknown URI: dunno what user wants"))))
+	 #+nomore(values menu-widget tokens nil)))))
   )
 
 
