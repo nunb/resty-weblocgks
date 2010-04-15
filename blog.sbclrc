@@ -30,3 +30,6 @@
 (defmacro loadsys (sys)
  `(asdf:oos 'asdf:load-op (quote ,sys)))
 
+;;(app::lagru-start :port 7070 :debug t)
+
+(weblocks::start-weblocks :port 7070)

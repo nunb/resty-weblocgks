@@ -1,8 +1,8 @@
-
 (defpackage #:resty-weblocgks
   (:use :cl :weblocks :cl-who
 	:metabang.utilities :anaphora)
   (:import-from :anaphora #:aif #:aprog1 #:awhen)
+  (:import-from :f-underscore #:f_% #:f_ #:f0)
   (:documentation
    "A web application based on Weblocks."))
 
@@ -14,7 +14,7 @@
     :prefix "/"
     :description "resty-weblocgks: An example application"
     :init-user-session 'resty-weblocgks::init-user-session
-    :autostart nil                   ;; have to start the app manually
+    :autostart t
     :dependencies '((:stylesheet "navigation"))
     :ignore-default-dependencies nil) ;; accept the defaults
 

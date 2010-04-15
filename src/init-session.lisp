@@ -1,5 +1,6 @@
-
 (in-package :resty-weblocgks)
+
+;; navigation
 
 (defun init-user-session (comp)
   "callback function to initialize new sessions"
@@ -50,17 +51,9 @@
 	       tokens nil))
       ((equal (first tokens) "admin")
        (values
-	(make-admin-page)
-	#+nomore(make-instance 'funcall-widget :fun-designator (lambda/cc (&rest args)
-								 (with-flow (root-composite)
-								   (unless (authenticatedp)
-								     (do-dialog "Login"))
-								   (if (authenticatedp)
-								       (yield (make-admin-page))
-								       (progn
-									 (send-script "Login failure")
-									 (redirect "/"))))
-								 (with-html (:div "If user is logged in, proceed, otherwise dialogs.."))))
+	;;(make-admin-page)
+	;;#+nomore
+	(make-instance 'admin-guard-widget) ;; This used to be a simple-widget, but that was too simplistic an approach!
 	tokens nil))
 
       ((and (eql (length (first tokens)) 4)

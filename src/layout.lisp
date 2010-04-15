@@ -1,13 +1,6 @@
 (in-package :resty-weblocgks)
 
-(defun save-in-session (key data)
-  (setf (webapp-session-value key)
-	  data))
-
-(defun get-from-session (key)
-  (multiple-value-bind (data success)
-      (webapp-session-value key)
-    (if success data "err")))
+(setf weblocks::*catch-errors-p* nil)
 
 (defun make-main-page ()
   (let (blog-page)
@@ -15,8 +8,7 @@
 	  (make-blog-widget))
     (make-instance 'static-selector
 		   :panes
-		   (list
-		    
+		   (list		    
 		     (cons 'main blog-page)
 		     (cons 'admin (make-admin-page))))))
 
@@ -44,19 +36,7 @@
 					     (with-html (:h1 "Posts")))
 			 :view 'post-table-view
 			 :item-data-view 'post-data-view
-			 :item-form-view 'post-form-view
-			 :on-add-item
-			 (lambda (&rest args) ;; (break "me")
-			   (aif (get-from-session 'blog)
-				(reset-blog it)
-				(break "no,error"))
-			   (redirect "/main"))
-			 :on-delete-item
-			 (lambda (&rest args) ;; (break "me")
-			   (aif (get-from-session 'blog)
-				(reset-blog it)
-				(break "no,error")))))
-    ;; (save-in-session 'main blog)
+			 :item-form-view 'post-form-view))
     blog))
 
 (defun make-admin-page ()

@@ -3,13 +3,7 @@ SWANK_PORT=4005
 WEBLOCKS_PORT=7070
 
 echo "Project root: $PROJECT_ROOT"
-echo "NOT DELETING old app fasl"
-# find $PROJECT_ROOT/src  -iname \*.fasl -delete
-
-# --  not used any more, see last sbcl invocation
-#sbcl --userinit $PROJECT_ROOT/lib/src/weblocks-dev-pure/examples/resty-weblocgks/blog.sbclrc $PROJECT_ROOT $WEBLOCKS_PORT $SWANK_PORT
-#sbcl --userinit $PROJECT_ROOT/lib/src/weblocks-dev-pure/examples/weblocks-demo/demo.sbclrc $PROJECT_ROOT $WEBLOCKS_PORT $SWANK_PORT
-#sbcl --userinit $PROJECT_ROOT/aw.sbclrc $PROJECT_ROOT $WEBLOCKS_PORT $SWANK_PORT
-
+echo "Deleting old app fasl"
+find $PROJECT_ROOT/src  -iname \*.fasl -delete
 
 sbcl --userinit $PROJECT_ROOT/blog.sbclrc $PROJECT_ROOT $WEBLOCKS_PORT $SWANK_PORT

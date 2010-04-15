@@ -22,6 +22,12 @@
 				:depends-on ("layout"))
 			 (:file "layout" 
 				:depends-on ("model" "views"))
+			 (:module base-code
+				  :components
+				  ((:file "nunb-dialog")
+				   (:file "utils")
+				   (:file "nunb-composites")
+				   (:file "flow-choices" :depends-on ("nunb-composites" "utils"))))
 			 (:module model
 				  :components
 				  ((:file "post"
@@ -37,7 +43,8 @@
 				  :depends-on ("model"))
 			 (:module widgets
 				  :components
-				  ((:file "post")
+				  ((:file "admin-guard")
+				   (:file "post")
 				   (:file "blog" 
 					  :depends-on ("post")))
 				  :depends-on ("model" "views")))
