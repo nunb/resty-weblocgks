@@ -2,6 +2,12 @@
 
 resty-blog-0.1
 
+	* Added a rudimentary login-system, and demonstrate that a
+	particular url (/admin) can be guarded for the duration of a
+	session.
+	
+resty-blog-0.1
+
 	* Changed init-session to include code for selector.
 
 2008-03-08  Evan Monroig  <evan.monroig@gmail.com>
