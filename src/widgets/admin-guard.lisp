@@ -16,7 +16,7 @@
 			   (do-confirmation-flow
 			       "Click Ok to login, and Cancel to simulate not having the right password or login credentials."
 			     :no-text "Cancel"
-			     :if-yes (f_% (save-in-session *authentication-key* "john_q_user"))
+			     :if-yes (f_% (save-in-session *authentication-key* "john_q_user") (redirect "/admin"))
 			     :if-no  (f_% (save-in-session *authentication-key* nil))
 			     :after  (f_% (aif (get-from-session 'login-failures)
 					       (save-in-session 'login-failures (+ 1 it))
