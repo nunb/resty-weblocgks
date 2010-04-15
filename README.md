@@ -5,6 +5,14 @@ Expand the simple-blog example that comes with
 weblocks to support a more buzzword-compliant blog interface,
 especially with regards to URLs.
 
+# Current todo list/plans
+1. change damn name to resty-blog or resty-weblogks
+2. make a nicer post widget which is the default at /
+3. make the menu automagically attach to each page? (use tables for sanity?)
+4. make a post-comment class (aka replies) and implement what Trastabuga's been talking about on-list.
+5. make renderers for comments (must use a threaded view) and a dialog that lets a user add a comment.
+
+
 # History
 
 This example started out as an official weblocks example by Evan
@@ -31,9 +39,6 @@ subwidget and also draws the UI for the post.
 tokens.. [still figuring out how this works] [ng-tok]
 
 [ng-tok]: http://groups.google.com/group/weblocks/msg/8d53486c83df7def
-"Suggestion for sub-dispatchers"
-
-
 
 ## URLs map to specific UIs as follows:
 
