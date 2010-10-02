@@ -27,7 +27,7 @@
 	((weblocks::current-dialog)
 	 ;;(break (format nil  "uri was ~A ?" (dialog-uri)))
 	 (warn "Multiple dialogs not allowed, redirecting to continuation url..")
-	 (redirect (weblocks::dialog-uri-or-webroot) :defer nil))
+	 (redirect (weblocks::dialog-uri-or-webroot))
 	(t
 	 (prog1
 	     (weblocks::call
