@@ -49,7 +49,27 @@
 							  (render-widget menu-widget)))
 	 )
 	(t ;; Handle anything else
-	 (make-instance 'funcall-widget :fun-designator (lambda (&rest args)
+	 (make-teleport-page)
+	 #+nomore(make-instance 'funcall-widget :fun-designator (lambda (&rest args)
 							  (with-html (:div "Fell through to unknown URI: dunno what user wants")
 								     (str (format nil "Also public files path ~A" *our-public-files-path*)))))
 	 #+nomore(values menu-widget tokens nil))))))
+
+
+
+(defun make-teleport-page ()
+ (let* ((venue-gridedit (make-posts-gridedit))
+        (venue-gridedit-teleport
+         (make-instance 'teleport :name 'teleport-venue-gridedit
+                        :source venue-gridedit))
+        (review-gridedit (make-users-gridedit))
+        (review-gridedit-teleport
+         (make-instance 'teleport :name 'teleport-review-gridedit
+                        :source review-gridedit))
+        (nav (make-navigation "Venue Navigation"
+                                         (list "Venues" venue-gridedit-teleport "venue")
+                                         (list "Reviews" review-gridedit-teleport "review"))))
+   (make-instance 'widget :children
+                  (list nav
+                        venue-gridedit-teleport
+                        review-gridedit-teleport))))
